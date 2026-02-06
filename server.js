@@ -80,7 +80,7 @@ function saveBase64Image(base64Data, fileName) {
 // 删除图片文件
 function deleteImage(imagePath) {
     try {
-        const fullPath = path.join(__dirname, imagePath);
+        const fullPath = path.join(basePath, imagePath);
         if (fs.existsSync(fullPath)) {
             fs.unlinkSync(fullPath);
         }
@@ -321,7 +321,7 @@ function handleUpdateProject(req, res) {
 
 // 静态文件服务
 function serveStaticFile(req, res, pathname) {
-    let filePath = path.join(__dirname, pathname === '/' ? 'index.html' : pathname);
+    let filePath = path.join(basePath, pathname === '/' ? 'index.html' : pathname);
     
     const ext = path.extname(filePath);
     const contentTypes = {
