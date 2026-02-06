@@ -1,0 +1,1209 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #0a1628;
+    overflow-x: hidden;
+}
+
+.game-container {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #1e3a5f 0%, #0d2137 50%, #061220 100%);
+    position: relative;
+    padding-bottom: 100px;
+}
+
+/* 顶部状态栏 - 蓝色调 */
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(180deg, #1a4a6e 0%, #0d3a5c 100%);
+    border-bottom: 3px solid #082a45;
+    box-shadow: 0 4px 15px rgba(0, 100, 200, 0.3);
+}
+
+.currency-bar {
+    display: flex;
+    gap: 15px;
+}
+
+.currency-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(180deg, #2a5a8a 0%, #1a4a7a 100%);
+    padding: 8px 12px;
+    border-radius: 25px;
+    border: 2px solid #4a9ad9;
+    box-shadow: 
+        inset 0 2px 5px rgba(255, 255, 255, 0.1),
+        0 3px 10px rgba(0, 100, 200, 0.4);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    min-width: 80px;
+    justify-content: center;
+}
+
+.currency-item:hover {
+    transform: scale(1.05);
+    box-shadow: 
+        inset 0 2px 5px rgba(255, 255, 255, 0.2),
+        0 5px 15px rgba(0, 150, 255, 0.5);
+}
+
+.currency-item:active {
+    transform: scale(0.95);
+}
+
+.currency-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.currency-value {
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    min-width: 30px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.achievement-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: linear-gradient(180deg, #4a9ad9 0%, #2a7ab9 100%);
+    color: #fff;
+    border: 2px solid #6abaff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 
+        0 4px 10px rgba(0, 150, 255, 0.4),
+        inset 0 1px 3px rgba(255, 255, 255, 0.3);
+    position: relative;
+}
+
+.achievement-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 
+        0 6px 15px rgba(0, 150, 255, 0.5),
+        inset 0 1px 3px rgba(255, 255, 255, 0.4);
+}
+
+.achievement-btn:active {
+    transform: scale(0.95);
+}
+
+.achievement-btn::after {
+    content: attr(data-count);
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(180deg, #ff6b6b 0%, #dc143c 100%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    min-width: 20px;
+    text-align: center;
+}
+
+.achievement-btn[data-count="0"]::after {
+    display: none;
+}
+
+.btn-icon {
+    font-size: 18px;
+}
+
+/* 仓库标题 */
+.warehouse-header {
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(180deg, #1e5a8a 0%, #0d4a7a 100%);
+    border-bottom: 4px solid #083a6a;
+    box-shadow: 0 4px 15px rgba(0, 100, 200, 0.3);
+}
+
+.warehouse-title {
+    color: #6abaff;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 
+        2px 2px 0 #0d3a5c,
+        -1px -1px 0 #0d3a5c,
+        1px -1px 0 #0d3a5c,
+        -1px 1px 0 #0d3a5c;
+    margin-bottom: 5px;
+}
+
+.warehouse-count {
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* 分栏标签 */
+.tab-container {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 0 20px;
+    margin-top: -20px;
+    position: relative;
+    z-index: 10;
+}
+
+.tab {
+    flex: 1;
+    max-width: 120px;
+    padding: 15px 20px;
+    background: linear-gradient(180deg, #2a6a9a 0%, #1a5a8a 100%);
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #4a8ac9;
+    border-bottom: none;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 
+        0 -3px 10px rgba(0, 100, 200, 0.2),
+        inset 0 2px 5px rgba(255, 255, 255, 0.1);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.tab:hover {
+    background: linear-gradient(180deg, #3a7aaa 0%, #2a6a9a 100%);
+    transform: translateY(-3px);
+}
+
+.tab.active {
+    background: linear-gradient(180deg, #4a9ad9 0%, #3a8ac9 100%);
+    transform: translateY(-5px);
+    box-shadow: 
+        0 -5px 15px rgba(0, 150, 255, 0.3),
+        inset 0 2px 5px rgba(255, 255, 255, 0.2);
+    z-index: 11;
+}
+
+/* 主内容区域 */
+.main-content {
+    background: linear-gradient(180deg, #1a3a5a 0%, #0d2a4a 100%);
+    border: 4px solid #1e5a8a;
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    margin: 30px 20px 20px;
+    padding: 20px;
+    box-shadow: 
+        0 10px 30px rgba(0, 100, 200, 0.3),
+        inset 0 2px 10px rgba(255, 255, 255, 0.05);
+    min-height: 500px;
+}
+
+/* 盒子网格 */
+.box-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+/* 盒子网格 - 3D透视容器 */
+.box-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    perspective: 1000px;
+}
+
+/* 盒子样式 - 蓝色调 */
+.box {
+    background: linear-gradient(180deg, #2a5a8a 0%, #1a4a7a 100%);
+    border: 3px solid #4a9ad9;
+    border-radius: 10px;
+    padding: 15px;
+    transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 
+        0 5px 15px rgba(0, 100, 200, 0.2),
+        inset 0 2px 5px rgba(255, 255, 255, 0.1);
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+/* 卡片光泽效果 - 动态跟随鼠标（减弱效果） */
+.box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at var(--glare-x, 50%) var(--glare-y, 50%),
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.1) 25%,
+        transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: 8px;
+    z-index: 10;
+}
+
+.box:hover::before {
+    opacity: 0.7;
+}
+
+/* 已填充盒子的光泽效果 - 像图二蓝色卡片那样 */
+.box.filled::before {
+    background: radial-gradient(
+        circle at var(--glare-x, 50%) var(--glare-y, 50%),
+        rgba(255, 255, 255, 0.35) 0%,
+        rgba(255, 255, 255, 0.15) 30%,
+        transparent 60%
+    );
+}
+
+.box.filled:hover::before {
+    opacity: 0.8;
+}
+
+/* 卡片边框高光 */
+.box::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 70%
+    );
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.box:hover::after {
+    opacity: 0.8;
+}
+
+/* 已填充盒子的边框高光 - 像图二蓝色卡片那样 */
+.box.filled::after {
+    background: linear-gradient(
+        45deg,
+        transparent 25%,
+        rgba(255, 255, 255, 0.25) 50%,
+        transparent 75%
+    );
+}
+
+.box.filled:hover::after {
+    opacity: 0.7;
+}
+
+.box.empty {
+    background: linear-gradient(180deg, #1a3a5a 0%, #0d2a4a 100%);
+    border: 3px dashed #3a6a9a;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #4a8ac9;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.box.empty:hover {
+    border-color: #6abaff;
+    color: #6abaff;
+    background: linear-gradient(180deg, #1e4a6a 0%, #0d3a5a 100%);
+}
+
+.box.filled {
+    cursor: default;
+    transform-style: preserve-3d;
+}
+
+/* 难度颜色区分 */
+.box.difficulty-1 {
+    background: linear-gradient(180deg, #d4a817 0%, #b8941a 100%);
+    border-color: #f0c850;
+    box-shadow: 
+        0 5px 15px rgba(212, 168, 23, 0.3),
+        inset 0 2px 5px rgba(255, 255, 255, 0.2);
+}
+
+.box.difficulty-1 .box-title {
+    background: rgba(180, 140, 10, 0.7);
+}
+
+.box.difficulty-1 .box-image {
+    border-color: #e8c040;
+}
+
+.box.difficulty-2 {
+    background: linear-gradient(180deg, #e67e22 0%, #d35400 100%);
+    border-color: #ff9f43;
+    box-shadow: 
+        0 5px 15px rgba(230, 126, 34, 0.3),
+        inset 0 2px 5px rgba(255, 255, 255, 0.2);
+}
+
+.box.difficulty-2 .box-title {
+    background: rgba(200, 100, 0, 0.7);
+}
+
+.box.difficulty-2 .box-image {
+    border-color: #ffaa50;
+}
+
+.box.difficulty-3 {
+    background: linear-gradient(180deg, #c0392b 0%, #962d22 100%);
+    border-color: #e74c3c;
+    box-shadow: 
+        0 5px 15px rgba(192, 57, 43, 0.3),
+        inset 0 2px 5px rgba(255, 255, 255, 0.2);
+}
+
+.box.difficulty-3 .box-title {
+    background: rgba(150, 30, 20, 0.7);
+}
+
+.box.difficulty-3 .box-image {
+    border-color: #ff6b5b;
+}
+
+.box-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.box-image {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid #4a9ad9;
+    box-shadow: 0 3px 10px rgba(0, 100, 200, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.box:hover .box-image {
+    transform: scale(1.05);
+}
+
+.box-title {
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 100, 200, 0.5);
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.box-actions {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.box-btn {
+    flex: 1;
+    padding: 6px 8px;
+    border: none;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.box-btn.view {
+    background: linear-gradient(180deg, #4a9ad9 0%, #2a7ab9 100%);
+    color: white;
+    border: 1px solid #6abaff;
+}
+
+.box-btn.edit {
+    background: linear-gradient(180deg, #5aabd9 0%, #3a8bc9 100%);
+    color: white;
+    border: 1px solid #7abcff;
+}
+
+.box-btn.delete {
+    background: linear-gradient(180deg, #d94a5a 0%, #b92a3a 100%);
+    color: white;
+    border: 1px solid #ff6a7a;
+}
+
+.box-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.box-btn:active {
+    transform: scale(0.95);
+}
+
+/* 模态框 - 蓝色调 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: linear-gradient(180deg, #1e4a6a 0%, #0d3a5a 100%);
+    border: 4px solid #4a9ad9;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 
+        0 20px 60px rgba(0, 100, 200, 0.5),
+        inset 0 2px 10px rgba(255, 255, 255, 0.1);
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+/* 上传模态框宽版布局 */
+.modal-content.upload-modal-wide {
+    max-width: 800px;
+    width: 95%;
+}
+
+.upload-form-layout {
+    display: flex;
+    gap: 25px;
+    padding: 20px;
+}
+
+.upload-left-column {
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+}
+
+.upload-left-column .file-upload-area {
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-left-column .upload-preview {
+    height: 100%;
+    min-height: 250px;
+}
+
+.upload-left-column .upload-preview img {
+    max-height: 250px;
+    width: auto;
+    object-fit: contain;
+}
+
+.upload-right-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.upload-right-column .form-group {
+    margin-bottom: 0;
+}
+
+.upload-right-column .difficulty-options {
+    gap: 8px;
+}
+
+.upload-right-column .difficulty-option {
+    padding: 10px 8px;
+}
+
+.upload-right-column .difficulty-star {
+    font-size: 16px;
+}
+
+.upload-right-column .difficulty-reward {
+    font-size: 11px;
+}
+
+.upload-right-column textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.upload-right-column .form-actions {
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+/* 响应式：小屏幕时恢复单列布局 */
+@media (max-width: 768px) {
+    .modal-content.upload-modal-wide {
+        max-width: 95%;
+        width: 95%;
+    }
+    
+    .upload-form-layout {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .upload-left-column {
+        flex: 1;
+    }
+    
+    .upload-left-column .file-upload-area {
+        min-height: 180px;
+    }
+}
+
+/* 查看弹窗样式 */
+.view-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.view-modal-content {
+    background: linear-gradient(180deg, #1e4a6a 0%, #0d3a5a 100%);
+    border: 4px solid #4a9ad9;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 100, 200, 0.5);
+}
+
+.view-modal-header {
+    background: linear-gradient(180deg, #1e5a8a 0%, #0d4a7a 100%);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #083a6a;
+}
+
+.view-modal-header h3 {
+    color: #6abaff;
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    margin: 0;
+}
+
+.view-modal-close {
+    background: linear-gradient(180deg, #d94a5a 0%, #b92a3a 100%);
+    color: white;
+    border: 2px solid #ff6a7a;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.view-modal-close:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(255, 50, 50, 0.4);
+}
+
+/* 编辑模态框当前图片显示 */
+.current-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+}
+
+.current-image img {
+    max-width: 100%;
+    max-height: 250px;
+    border-radius: 8px;
+    border: 2px solid #4a9ad9;
+    box-shadow: 0 3px 10px rgba(0, 100, 200, 0.3);
+}
+
+.view-modal-body {
+    padding: 20px;
+}
+
+.view-modal-image {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.view-modal-image img {
+    max-width: 100%;
+    max-height: 250px;
+    border-radius: 10px;
+    border: 3px solid #4a9ad9;
+    box-shadow: 0 5px 15px rgba(0, 100, 200, 0.3);
+}
+
+.view-modal-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.view-modal-section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.view-modal-label {
+    color: #6abaff;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.view-modal-value {
+    color: #fff;
+    font-size: 16px;
+}
+
+.view-modal-description {
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.6;
+    background: rgba(0, 100, 200, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #4a8ac9;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.modal-header {
+    background: linear-gradient(180deg, #1e5a8a 0%, #0d4a7a 100%);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #083a6a;
+}
+
+.modal-header h2 {
+    color: #6abaff;
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    margin: 0;
+}
+
+.modal-close {
+    background: linear-gradient(180deg, #d94a5a 0%, #b92a3a 100%);
+    color: white;
+    border: 2px solid #ff6a7a;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-close:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(255, 50, 50, 0.4);
+}
+
+.modal form {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #6abaff;
+    font-weight: bold;
+    font-size: 14px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #4a8ac9;
+    border-radius: 10px;
+    font-size: 14px;
+    background: #0d2a4a;
+    color: #fff;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #6abaff;
+    box-shadow: 
+        inset 0 2px 5px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(106, 186, 255, 0.3);
+}
+
+/* 文件上传区域 */
+.file-upload-area {
+    position: relative;
+    border: 3px dashed #4a8ac9;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    background: #0d2a4a;
+    transition: all 0.3s ease;
+}
+
+.file-upload-area:hover {
+    border-color: #6abaff;
+    background: #0d3a5a;
+}
+
+.file-upload-area input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #6abaff;
+}
+
+.upload-icon {
+    font-size: 40px;
+}
+
+/* 图片预览区域 */
+.upload-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-preview img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 8px;
+    border: 2px solid #4a9ad9;
+    box-shadow: 0 3px 10px rgba(0, 100, 200, 0.3);
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #d94a5a 0%, #b92a3a 100%);
+    color: white;
+    border: 2px solid #ff6a7a;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.remove-image-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(255, 50, 50, 0.4);
+}
+
+/* 难度选择 */
+.difficulty-options {
+    display: flex;
+    gap: 10px;
+}
+
+.difficulty-option {
+    flex: 1;
+    padding: 15px 10px;
+    background: linear-gradient(180deg, #1a4a6a 0%, #0d3a5a 100%);
+    border: 2px solid #4a8ac9;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.difficulty-option:hover {
+    transform: scale(1.05);
+    border-color: #6abaff;
+    box-shadow: 0 5px 15px rgba(0, 150, 255, 0.3);
+}
+
+.difficulty-option.selected {
+    background: linear-gradient(180deg, #4a9ad9 0%, #2a7ab9 100%);
+    border-color: #6abaff;
+    box-shadow: 
+        0 5px 15px rgba(0, 150, 255, 0.4),
+        inset 0 2px 5px rgba(255, 255, 255, 0.2);
+}
+
+.difficulty-star {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.difficulty-reward {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: #6abaff;
+}
+
+/* 游戏按钮 */
+.game-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.game-btn.primary {
+    background: linear-gradient(180deg, #4a9ad9 0%, #2a7ab9 100%);
+    color: #fff;
+    border: 2px solid #6abaff;
+    box-shadow: 
+        0 5px 15px rgba(0, 150, 255, 0.4),
+        inset 0 2px 5px rgba(255, 255, 255, 0.2);
+}
+
+.game-btn.primary:hover {
+    transform: scale(1.02);
+    box-shadow: 
+        0 8px 20px rgba(0, 150, 255, 0.5),
+        inset 0 2px 5px rgba(255, 255, 255, 0.3);
+}
+
+.game-btn.primary:active {
+    transform: scale(0.98);
+}
+
+/* 成就列表 */
+.achievement-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.achievement-item {
+    background: linear-gradient(180deg, #1e4a6a 0%, #0d3a5a 100%);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #4a9ad9;
+    border-left: 5px solid #6abaff;
+    box-shadow: 0 3px 10px rgba(0, 100, 200, 0.2);
+    animation: achievementUnlock 0.5s ease;
+}
+
+.achievement-item h3 {
+    color: #6abaff;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.achievement-item p {
+    color: #8abaff;
+    font-size: 12px;
+}
+
+/* 添加盒子按钮 */
+.add-box-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #4a9ad9 0%, #2a7ab9 100%);
+    color: white;
+    border: 3px solid #6abaff;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 5px 20px rgba(0, 150, 255, 0.4),
+        inset 0 2px 5px rgba(255, 255, 255, 0.3);
+    z-index: 100;
+}
+
+.add-box-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 
+        0 8px 25px rgba(0, 150, 255, 0.5),
+        inset 0 2px 5px rgba(255, 255, 255, 0.4);
+}
+
+.add-box-btn:active {
+    transform: scale(0.95);
+}
+
+/* 粒子效果容器 */
+.particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+}
+
+.particle {
+    position: absolute;
+    font-size: 24px;
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+
+/* 动画 */
+@keyframes achievementUnlock {
+    0% {
+        transform: scale(0.8) rotate(-5deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1) rotate(5deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+/* 粒子爆炸动画 - 从中心向外喷射 */
+@keyframes particleExplode {
+    0% {
+        transform: 
+            translate(-50%, -50%) 
+            translate(0, 0) 
+            rotate(0deg) 
+            scale(var(--random-start-scale, 0.5));
+        opacity: 1;
+    }
+    20% {
+        transform: 
+            translate(-50%, -50%) 
+            translate(calc(var(--random-x) * 0.3), calc(var(--random-y) * 0.3)) 
+            rotate(calc(var(--random-rotation) * 0.3)) 
+            scale(calc(var(--random-scale) * 1.2));
+        opacity: 1;
+    }
+    100% {
+        transform: 
+            translate(-50%, -50%) 
+            translate(var(--random-x), var(--random-y)) 
+            rotate(var(--random-rotation)) 
+            scale(var(--random-scale));
+        opacity: 0;
+    }
+}
+
+/* 卡片进入动画 - 翻转效果 */
+@keyframes cardFlipIn {
+    0% {
+        transform: perspective(1000px) rotateY(90deg) scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: perspective(1000px) rotateY(-10deg) scale(1.02);
+    }
+    100% {
+        transform: perspective(1000px) rotateY(0deg) scale(1);
+        opacity: 1;
+    }
+}
+
+/* 已填充盒子的进入动画 */
+.box.filled {
+    animation: cardFlipIn 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+/* 为每个卡片添加延迟，形成级联效果 */
+.box.filled:nth-child(1) { animation-delay: 0.05s; }
+.box.filled:nth-child(2) { animation-delay: 0.1s; }
+.box.filled:nth-child(3) { animation-delay: 0.15s; }
+.box.filled:nth-child(4) { animation-delay: 0.2s; }
+.box.filled:nth-child(5) { animation-delay: 0.25s; }
+.box.filled:nth-child(6) { animation-delay: 0.3s; }
+.box.filled:nth-child(7) { animation-delay: 0.35s; }
+.box.filled:nth-child(8) { animation-delay: 0.4s; }
+.box.filled:nth-child(9) { animation-delay: 0.45s; }
+.box.filled:nth-child(10) { animation-delay: 0.5s; }
+.box.filled:nth-child(11) { animation-delay: 0.55s; }
+.box.filled:nth-child(12) { animation-delay: 0.6s; }
+.box.filled:nth-child(n+13) { animation-delay: 0.65s; }
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0d2a4a;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #4a9ad9 0%, #2a7ab9 100%);
+    border-radius: 10px;
+    border: 2px solid #0d2a4a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #6abaff 0%, #4a9ad9 100%);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .box-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+
+    .status-bar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .currency-bar {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .tab {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+
+    .main-content {
+        margin: 0 10px 20px;
+        padding: 15px;
+    }
+
+    .modal-content {
+        width: 95%;
+    }
+
+    .difficulty-options {
+        flex-direction: column;
+    }
+
+    .add-box-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+}
