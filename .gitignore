@@ -6,6 +6,10 @@ logs
 *.log
 npm-debug.log*
 
+# Build outputs
+dist/
+release/
+
 # OS generated files
 .DS_Store
 .DS_Store?

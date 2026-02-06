@@ -2,9 +2,13 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
+const { exec } = require('child_process');
 
 const PORT = 8000;
-const ASSET_DIR = path.join(__dirname, 'asset');
+
+const isPkg = typeof process.pkg !== 'undefined';
+const basePath = isPkg ? path.dirname(process.execPath) : __dirname;
+const ASSET_DIR = path.join(basePath, 'asset');
 const IMAGES_DIR = path.join(ASSET_DIR, 'images');
 const ACHIEVE_DIR = path.join(ASSET_DIR, 'achieve');
 
@@ -354,4 +358,22 @@ server.listen(PORT, () => {
     console.log(`服务器运行在 http://localhost:${PORT}`);
     console.log(`图片存储目录: ${IMAGES_DIR}`);
     console.log(`数据存储目录: ${ACHIEVE_DIR}`);
+    
+    const url = `http://localhost:${PORT}`;
+    
+    if (isPkg) {
+        console.log('\n=========================================');
+        console.log('     🏆 Achievement Box Started!');
+        console.log('=========================================');
+        console.log(`Access: ${url}`);
+        console.log('=========================================\n');
+        
+        setTimeout(() => {
+            const startCommand = process.platform === 'win32' ? 'start' : 
+                                process.platform === 'darwin' ? 'open' : 'xdg-open';
+            exec(`${startCommand} ${url}`, (err) => {
+                if (err) console.error('Failed to open browser:', err);
+            });
+        }, 1000);
+    }
 });

@@ -1,0 +1,35 @@
+{
+  "name": "infi-achievebox",
+  "version": "1.0.0",
+  "description": "A personal achievement management system",
+  "main": "server.js",
+  "bin": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "pkg . --targets node16-win-x64 --output dist/AchievementBox.exe",
+    "build:win": "pkg . --targets node16-win-x64 --output dist/AchievementBox.exe"
+  },
+  "keywords": [
+    "achievement",
+    "game",
+    "management"
+  ],
+  "author": "zhadao",
+  "license": "MIT",
+  "devDependencies": {
+    "pkg": "^5.8.1"
+  },
+  "pkg": {
+    "assets": [
+      "asset/**/*",
+      "*.html",
+      "*.css",
+      "*.ico",
+      "*.png"
+    ],
+    "targets": [
+      "node18-win-x64"
+    ],
+    "outputPath": "dist"
+  }
+}
