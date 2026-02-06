@@ -29,10 +29,10 @@ const tabs = document.querySelectorAll('.tab');
 
 // 初始化
 async function init() {
-    // 加载货币数据（从localStorage）
-    loadCurrencyFromLocalStorage();
     // 从服务器加载项目数据
     await loadProjectsFromServer();
+    // 根据所有项目重新计算奖励（确保奖励数据准确）
+    recalculateAllRewards();
     // 渲染盒子
     renderBoxes();
     // 渲染成就
@@ -370,26 +370,40 @@ function viewProject(projectId) {
     });
 }
 
+// 计算奖励
+function calculateReward(difficulty) {
+    const diff = String(difficulty);
+    switch (diff) {
+        case '1': return { coins: 10, diamonds: 0 };
+        case '2': return { coins: 20, diamonds: 0 };
+        case '3': return { coins: 0, diamonds: 1 };
+        default: return { coins: 0, diamonds: 0 };
+    }
+}
+
+// 从所有项目重新计算总奖励
+function recalculateAllRewards() {
+    let totalCoins = 0;
+    let totalDiamonds = 0;
+    
+    projects.forEach(project => {
+        const reward = calculateReward(project.difficulty);
+        totalCoins += reward.coins;
+        totalDiamonds += reward.diamonds;
+    });
+    
+    coins = totalCoins;
+    diamonds = totalDiamonds;
+    saveCurrencyToLocalStorage();
+    updateCurrencyDisplay();
+}
+
 // 删除项目
 async function deleteProject(projectId) {
     const project = projects.find(p => p.id === projectId);
     if (!project) return;
 
     if (confirm('确定要删除这个项目吗？删除后将扣除相应的金币或钻石。')) {
-        // 扣除相应的货币
-        const difficulty = String(project.difficulty);
-        switch (difficulty) {
-            case '1':
-                coins = Math.max(0, coins - 10);
-                break;
-            case '2':
-                coins = Math.max(0, coins - 20);
-                break;
-            case '3':
-                diamonds = Math.max(0, diamonds - 1);
-                break;
-        }
-
         try {
             // 从服务器删除
             const response = await fetch(`${API_BASE}/api/projects/delete`, {
@@ -407,10 +421,11 @@ async function deleteProject(projectId) {
                 // 删除对应的成就
                 achievements = achievements.filter(a => a.projectId !== projectId);
 
-                saveCurrencyToLocalStorage();
+                // 重新计算所有奖励
+                recalculateAllRewards();
+                
                 renderBoxes();
                 renderAchievements();
-                updateCurrencyDisplay();
                 updateWarehouseCount();
                 updateAchievementButtonCount();
             } else {
@@ -664,7 +679,7 @@ function addEventListeners() {
         const projectId = document.getElementById('edit-index').value;
         const description = document.getElementById('edit-project-description').value;
         const category = document.getElementById('edit-project-category').value;
-        const difficulty = document.getElementById('edit-project-difficulty').value;
+        const newDifficulty = document.getElementById('edit-project-difficulty').value;
         const achievementName = document.getElementById('edit-achievement-name').value;
         const imageFile = document.getElementById('edit-project-image').files[0];
 
@@ -677,10 +692,12 @@ function addEventListeners() {
             const project = projects.find(p => p.id === projectId);
             if (!project) return;
 
+            const oldDifficulty = project.difficulty;
+
             const updates = {
                 description: description,
                 category: category,
-                difficulty: difficulty,
+                difficulty: newDifficulty,
                 title: achievementName
             };
 
@@ -718,7 +735,11 @@ function addEventListeners() {
                     achievement.name = achievementName;
                 }
 
-                saveCurrencyToLocalStorage();
+                // 如果难度改变了，重新计算所有奖励
+                if (oldDifficulty !== newDifficulty) {
+                    recalculateAllRewards();
+                }
+
                 renderBoxes();
                 updateWarehouseCount();
                 closeEditModal();
