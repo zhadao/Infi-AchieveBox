@@ -34,9 +34,18 @@
 
         <!-- 分栏标签 -->
         <div class="tab-container">
-            <div class="tab active" data-tab="others">其他</div>
-            <div class="tab" data-tab="ugui">UGUI</div>
-            <div class="tab" data-tab="effects">动效</div>
+            <div class="tab active" data-tab="others">
+                <span class="tab-text">主题1</span>
+                <button class="tab-edit-btn" data-tab="others" title="编辑标签">✏️</button>
+            </div>
+            <div class="tab" data-tab="ugui">
+                <span class="tab-text">主题2</span>
+                <button class="tab-edit-btn" data-tab="ugui" title="编辑标签">✏️</button>
+            </div>
+            <div class="tab" data-tab="effects">
+                <span class="tab-text">主题3</span>
+                <button class="tab-edit-btn" data-tab="effects" title="编辑标签">✏️</button>
+            </div>
         </div>
 
         <!-- 主内容区域 -->
@@ -187,6 +196,27 @@
                         <div class="form-actions">
                             <button type="submit" id="save-edit-btn" class="game-btn primary">💾 保存修改</button>
                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 编辑标签模态框 -->
+        <div class="modal" id="edit-tab-modal">
+            <div class="modal-content game-modal">
+                <div class="modal-header">
+                    <h2>🏷️ 编辑标签名称</h2>
+                    <button class="modal-close" id="cancel-edit-tab-btn">×</button>
+                </div>
+                <form id="edit-tab-form">
+                    <div class="form-group">
+                        <label for="tab-name-input">标签名称</label>
+                        <input type="text" id="tab-name-input" placeholder="输入新的标签名称" required maxlength="10">
+                        <small style="color: #6abaff; margin-top: 5px; display: block;">最多10个字符</small>
+                    </div>
+                    <input type="hidden" id="edit-tab-target">
+                    <div class="form-actions">
+                        <button type="submit" class="game-btn primary">💾 保存标签</button>
                     </div>
                 </form>
             </div>

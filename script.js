@@ -6,6 +6,16 @@ let diamonds = 0;
 let boxCount = 24;
 let currentTab = 'others';
 
+// 默认标签名称
+const defaultTabNames = {
+    'others': '主题1',
+    'ugui': '主题2',
+    'effects': '主题3'
+};
+
+// 当前标签名称
+let tabNames = { ...defaultTabNames };
+
 // API 基础URL
 const API_BASE = '';
 
@@ -14,8 +24,10 @@ const boxGrid = document.getElementById('box-grid');
 const uploadModal = document.getElementById('upload-modal');
 const editModal = document.getElementById('edit-modal');
 const achievementModal = document.getElementById('achievement-modal');
+const editTabModal = document.getElementById('edit-tab-modal');
 const uploadForm = document.getElementById('upload-form');
 const editForm = document.getElementById('edit-form');
+const editTabForm = document.getElementById('edit-tab-form');
 const addBoxBtn = document.getElementById('add-box-btn');
 const achievementBtn = document.getElementById('achievement-btn');
 const coinCount = document.getElementById('coin-count');
@@ -29,6 +41,10 @@ const tabs = document.querySelectorAll('.tab');
 
 // 初始化
 async function init() {
+    // 加载标签名称
+    loadTabNamesFromLocalStorage();
+    updateTabDisplay();
+    
     // 从服务器加载项目数据
     await loadProjectsFromServer();
     // 根据所有项目重新计算奖励（确保奖励数据准确）
@@ -103,6 +119,80 @@ function saveCurrencyToLocalStorage() {
     localStorage.setItem('infiAchieveBox_diamonds', diamonds.toString());
     localStorage.setItem('infiAchieveBox_boxCount', boxCount.toString());
     localStorage.setItem('infiAchieveBox_currentTab', currentTab);
+}
+
+// 从localStorage加载标签名称
+function loadTabNamesFromLocalStorage() {
+    const savedTabNames = localStorage.getItem('infiAchieveBox_tabNames');
+    if (savedTabNames) {
+        try {
+            const parsed = JSON.parse(savedTabNames);
+            tabNames = { ...defaultTabNames, ...parsed };
+        } catch (e) {
+            console.error('加载标签名称失败:', e);
+            tabNames = { ...defaultTabNames };
+        }
+    }
+}
+
+// 保存标签名称到localStorage
+function saveTabNamesToLocalStorage() {
+    localStorage.setItem('infiAchieveBox_tabNames', JSON.stringify(tabNames));
+}
+
+// 更新标签显示
+function updateTabDisplay() {
+    tabs.forEach(tab => {
+        const tabKey = tab.dataset.tab;
+        const tabText = tab.querySelector('.tab-text');
+        if (tabText && tabNames[tabKey]) {
+            tabText.textContent = tabNames[tabKey];
+        }
+    });
+    
+    // 更新下拉框中的选项文本
+    updateSelectOptions();
+}
+
+// 更新选择框的选项
+function updateSelectOptions() {
+    const categorySelect = document.getElementById('project-category');
+    const editCategorySelect = document.getElementById('edit-project-category');
+    
+    const options = [
+        { value: 'others', text: tabNames['others'] },
+        { value: 'ugui', text: tabNames['ugui'] },
+        { value: 'effects', text: tabNames['effects'] }
+    ];
+    
+    [categorySelect, editCategorySelect].forEach(select => {
+        if (select) {
+            select.innerHTML = '';
+            options.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt.value;
+                option.textContent = opt.text;
+                select.appendChild(option);
+            });
+        }
+    });
+}
+
+// 打开编辑标签模态框
+function openEditTabModal(tabKey) {
+    const tabNameInput = document.getElementById('tab-name-input');
+    const tabTarget = document.getElementById('edit-tab-target');
+    
+    tabNameInput.value = tabNames[tabKey] || defaultTabNames[tabKey];
+    tabTarget.value = tabKey;
+    
+    editTabModal.classList.add('active');
+}
+
+// 关闭编辑标签模态框
+function closeEditTabModal() {
+    editTabModal.classList.remove('active');
+    editTabForm.reset();
 }
 
 // 渲染盒子
@@ -758,9 +848,35 @@ function addEventListeners() {
     document.getElementById('cancel-btn').addEventListener('click', closeUploadModal);
     document.getElementById('cancel-edit-btn').addEventListener('click', closeEditModal);
     document.getElementById('close-achievement-btn').addEventListener('click', closeAchievementModal);
+    document.getElementById('cancel-edit-tab-btn').addEventListener('click', closeEditTabModal);
 
     // 成就按钮
     achievementBtn.addEventListener('click', openAchievementModal);
+
+    // 标签编辑按钮
+    document.querySelectorAll('.tab-edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const tabKey = btn.dataset.tab;
+            openEditTabModal(tabKey);
+        });
+    });
+
+    // 编辑标签表单提交
+    editTabForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const tabKey = document.getElementById('edit-tab-target').value;
+        const newName = document.getElementById('tab-name-input').value.trim();
+        
+        if (newName) {
+            tabNames[tabKey] = newName;
+            saveTabNamesToLocalStorage();
+            updateTabDisplay();
+            closeEditTabModal();
+            showSuccessNotification(`🏷️ 标签已更名为 "${newName}"`);
+        }
+    });
 
     // 添加盒子按钮
     addBoxBtn.addEventListener('click', () => {
@@ -784,6 +900,7 @@ function addEventListeners() {
         if (e.target === uploadModal) closeUploadModal();
         if (e.target === editModal) closeEditModal();
         if (e.target === achievementModal) closeAchievementModal();
+        if (e.target === editTabModal) closeEditTabModal();
     });
 }
 
