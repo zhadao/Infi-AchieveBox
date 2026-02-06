@@ -168,7 +168,8 @@ node server.js
 ## 📧 联系方式
 
 - 作者: zhadao
-- 邮箱: zhadaolee@outlook.com
+- 邮箱: zhadaosizi@qq.com
+- B站：https://space.bilibili.com/491873894?spm_id_from=333.788.0.0
 - GitHub: https://github.com/zhadao/Infi-AchieveBox
 
 ## 🙏 致谢
