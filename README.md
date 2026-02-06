@@ -263,9 +263,6 @@ node server.js
 - `POST /api/projects/delete` - 删除项目
 - `POST /api/projects/update` - 更新项目
 
-## 📄 许可证
-
-本项目仅供个人学习和使用。
 
 ## 🤝 贡献
 
